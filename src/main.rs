@@ -37,6 +37,8 @@ impl HashCrack {
             || (self.hash_type == HashType::Sha512
                 && hash::sha512(possible_word.clone()) == self.clone().hash_sum)
         {
+            println!();
+
             println!("{}", format!("Word found: '{}'", possible_word).green());
             println!("{}", format!("Hashed amount: {}", hashed_amount).green());
             println!(
