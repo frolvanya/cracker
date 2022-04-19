@@ -33,8 +33,8 @@ pub fn get() -> ReturnStructure {
         .validate_with({
             let mut force = None;
             move |input: &String| -> Result<(), &str> {
-                if (hash_type.clone() == HashType::Sha256 && input.len() == 64)
-                    || (hash_type.clone() == HashType::Sha512 && input.len() == 128)
+                if (hash_type == HashType::Sha256 && input.len() == 64)
+                    || (hash_type == HashType::Sha512 && input.len() == 128)
                     || force.as_ref().map_or(false, |old| old == input)
                 {
                     Ok(())

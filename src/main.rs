@@ -38,10 +38,10 @@ impl HashCrack {
                 );
 
                 std::process::exit(1);
-            } else if self.clone().hash_type == HashType::Sha512
+            } else if self.hash_type == HashType::Sha512
                 && hash::sha512(possible_word.clone()) == self.clone().hash_sum
             {
-                println!("{}", format!("{}", possible_word).green());
+                println!("{}", possible_word.green());
                 println!(
                     "{}",
                     format!(
