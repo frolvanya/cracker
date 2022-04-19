@@ -26,13 +26,27 @@ struct HashCrack {
 }
 
 impl HashCrack {
-    fn crack(self: &Arc<Self>, crack_start_time: Instant, possible_word: String) {
+    fn crack(
+        self: &Arc<Self>,
+        crack_start_time: Instant,
+        hashed_amount: u64,
+        possible_word: String,
+    ) {
         if (self.hash_type == HashType::Sha256
             && hash::sha256(possible_word.clone()) == self.clone().hash_sum)
             || (self.hash_type == HashType::Sha512
                 && hash::sha512(possible_word.clone()) == self.clone().hash_sum)
         {
-            println!("{}", format!("Found: {}", possible_word).green());
+            println!("{}", format!("Word found: '{}'", possible_word).green());
+            println!("{}", format!("Hashed amount: {}", hashed_amount).green());
+            println!(
+                "{}",
+                format!(
+                    "HPS: {:.2}",
+                    hashed_amount as f64 / crack_start_time.elapsed().as_secs_f64()
+                )
+                .green()
+            );
             println!(
                 "{}",
                 format!(
@@ -48,17 +62,21 @@ impl HashCrack {
 
     fn start(self: &Arc<Self>) {
         let crack_start_time = Instant::now();
+        let mut hashed_amount = 0;
+
         let file_name = &self.file_name;
 
         if file_name.is_empty() {
             let preferences = &self.word_generation_preferences;
 
             for possible_word in word_generator::generate(preferences.to_vec()) {
-                self.crack(crack_start_time, possible_word)
+                self.crack(crack_start_time, hashed_amount, possible_word);
+                hashed_amount += 1;
             }
         } else if let Ok(words) = read_lines(file_name) {
             for possible_word in words.flatten() {
-                self.crack(crack_start_time, possible_word);
+                self.crack(crack_start_time, hashed_amount, possible_word);
+                hashed_amount += 1;
             }
         }
     }
