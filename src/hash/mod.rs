@@ -13,3 +13,9 @@ pub fn sha512(text: String) -> String {
 
     format!("{:x}", hasher.finalize())
 }
+
+pub fn md5(text: String) -> String {
+    let digest = md5::compute(text.as_bytes());
+
+    format!("{:x}", digest)
+}

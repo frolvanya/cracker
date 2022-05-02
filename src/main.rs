@@ -16,6 +16,7 @@ mod word_generator;
 pub enum HashType {
     Sha256,
     Sha512,
+    Md5,
 }
 
 struct HashCrack {
@@ -36,6 +37,8 @@ impl HashCrack {
             && hash::sha256(possible_word.clone()) == self.clone().hash_sum)
             || (self.hash_type == HashType::Sha512
                 && hash::sha512(possible_word.clone()) == self.clone().hash_sum)
+            || (self.hash_type == HashType::Md5
+                && hash::md5(possible_word.clone()) == self.clone().hash_sum)
         {
             println!();
 
